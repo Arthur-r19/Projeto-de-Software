@@ -5,11 +5,11 @@ from PySimpleGUI import PySimpleGUI as sg
 def CheckPassword(user, password):
     return user == 'admin' and password == 'admin'
 
+sg.theme("Reddit")
 
 #Janelas
 def janela_login():
     # Layout
-    sg.theme("Reddit")
     layoutLogin = [
         [sg.Text('Usuário\t'), sg.Input(key='usuario',size=(20,1))],
         [sg.Text('Senha\t'), sg.Input(key='senha', password_char='*',size=(20,1))],
@@ -72,6 +72,7 @@ while True:
     print(janela,'|',evento,'|',valores)
 # FECHAR JANELA
     if evento == sg.WIN_CLOSED:
+        janela.close()
         break
 # TELA DE LOGIN
     if janela == janelaLogin:
@@ -124,4 +125,5 @@ while True:
     if janela == janelaMenuPagamento:
         if evento == 'Voltar':
             janela.close()
+            print("janela: ", janela)
             janelaMenuPagamento = janela_menu_principal()
