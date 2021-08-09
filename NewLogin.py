@@ -1,4 +1,3 @@
-from tkinter import StringVar
 from PySimpleGUI import PySimpleGUI as sg
 
 
@@ -7,7 +6,7 @@ class LayoutController:
     def __init__(self, layout) -> None:
         self.LayoutAtivo = layout
 
-    def get_layout(self) -> StringVar:
+    def get_layout(self) -> str:
         return self.LayoutAtivo
         
     def set_layout(self, layout) -> None:
@@ -18,7 +17,7 @@ class LayoutController:
     
     def update_window_layout(self, janela, layoutNovo) -> None:
         janela[self.get_layout()].update(visible=False)
-        lc.set_layout(layoutNovo)
+        self.set_layout(layoutNovo)
         janela[layoutNovo].update(visible=True)
 
 #Funções
