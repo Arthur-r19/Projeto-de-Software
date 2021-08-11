@@ -19,10 +19,8 @@ git clone https://github.com/Arthur-r19/Projeto-de-Software.git
 cd Projeto-de-Software
 python login.py
 ```
-## Design pattern
-- Memento
 
-## Functions
+## Funções
 |   Função   |  Título  |    Descrição    | Status |
 |    :---:   |  :---:   |      :---:      |  :---: |
 |1| Adição de um empregado| Um novo empregado é adicionado ao sistema. Os seguintes atributos são fornecidos: nome, endereço, tipo (hourly, salaried, commissioned) e os atributos associados (salário horário, salário mensal, comissão). Um número de empregado (único) deve ser escolhido automaticamente pelo sistema.| :heavy_check_mark: |
