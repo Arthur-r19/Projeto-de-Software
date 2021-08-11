@@ -14,7 +14,7 @@
     Copyright 2021 PySimpleGUI
 """
 
-import PySimpleGUI as sg
+from PySimpleGUI import PySimpleGUI as sg
 
 def make_window(theme):
     sg.theme(theme)
@@ -130,6 +130,7 @@ def main():
             print("[LOG] User chose file: " + str(folder_or_file))
         elif event == "Set Theme":
             print("[LOG] Clicked Set Theme!")
+            print(values['-THEME LISTBOX-'])
             theme_chosen = values['-THEME LISTBOX-'][0]
             print("[LOG] User Chose Theme: " + str(theme_chosen))
             window.close()
