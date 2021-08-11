@@ -379,11 +379,13 @@ while True:
 
 
             else:
-                print('apertei confirmar?')
+                print('apertei confirmar?') #calmae 2 seg conserto isso KKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
                 print(f'id:{selectedId} sid:{selectedSid}')
+                selectedEmployee = Empresa.employeesList.get(selectedId)
                 if valores['MEE-TIPODECONTRATO'] == 'Horista':
                     editemployee = Hemployee(valores['MEE-NOME'], valores['MEE-ENDERECO'], valores['MEE-TIPODECONTRATO'], valores['MEE-VALORSALARIO'])
-                    editemployee.workedtime = Empresa.employeesList.get(selectedId).workedtime
+                    if selectedEmployee.category == 'Horista':
+                        editemployee.workedtime = selectedEmployee.workedtime
 
                 elif valores['MEE-TIPODECONTRATO'] == 'Assalariado':
                     editemployee = Semployee(valores['MEE-NOME'], valores['MEE-ENDERECO'], valores['MEE-TIPODECONTRATO'], valores['MEE-VALORSALARIO'])
