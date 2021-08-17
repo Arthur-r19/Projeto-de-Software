@@ -7,7 +7,7 @@ class Employee():
         self._xfee = 0
         self._id = -1
         self._sid = -1
-
+        
     def __str__(self) -> str:
         return str(f'nome: {self._name}\nend: {self._adress}\n categ: {self._category}\nid: {self._id}\nsid: {self._sid}')
 
@@ -51,18 +51,18 @@ class Employee():
         return self._mfee
     @mfee.setter
     def mfee(self, mfee):
-        self._mfee = mfee
+        self._mfee = float(mfee)
 
     @property
     def xfee(self):
         return self._xfee
     @xfee.setter
     def xfee(self, xfee):
-        self._xfee = xfee
+        self._xfee = float(xfee)
 
 
 
-class HoulyEmployee(Employee):
+class HourlyEmployee(Employee):
     def __init__(self, name, adress, category, wage) -> None:
         super().__init__(name, adress, category)
         self._wage = wage
@@ -73,14 +73,14 @@ class HoulyEmployee(Employee):
         return self._wage
     @wage.setter
     def wage(self, wage):
-        self._wage = wage
+        self._wage = float(wage)
 
     @property
     def workedtime(self):
         return self._workedtime
     @workedtime.setter
     def workedtime(self, workedtime):
-        self._workedtime = workedtime
+        self._workedtime = float(workedtime)
 
 
 
@@ -89,31 +89,39 @@ class CommissionedEmployee(Employee):
         super().__init__(name, adress, category)
         self._salary = salary
         self._commission = commission
+        self._comvalue = 0
 
     @property
     def salary(self):
         return self._salary
     @salary.setter
     def salary(self, salary):
-        self._salary = salary
+        self._salary = float(salary)
 
     @property
     def commission(self):
         return self._commission
     @commission.setter
     def commission(self, commission):
-        self._commission = commission
+        self._commission = float(commission)
+
+    @property
+    def comvalue(self):
+        return self._comvalue
+    @comvalue.setter
+    def comvalue(self, comvalue):
+        self._comvalue = float(comvalue)
 
 
 
 class SalaryEmployee(Employee):
     def __init__(self, name, adress, category, salary) -> None:
         super().__init__(name, adress, category)
-        self._salary = salary
+        self._salary = float(salary)
 
     @property
     def salary(self):
         return self._salary
     @salary.setter
     def salary(self, salary):
-        self._salary = salary
+        self._salary = float(salary)
