@@ -2,71 +2,9 @@ from PySimpleGUI import PySimpleGUI as sg
 from datetime import datetime as dt
 from company import Company as company
 from syndicate import Syndicate as syndicate
+from layoutcontroller import LayoutController
 from employee import HourlyEmployee as Hemployee, SalaryEmployee as Semployee, CommissionedEmployee as Cemployee
 import re
-
-#Classes
-class LayoutController:
-    def __init__(self, layout) -> None:
-        self.LayoutAtivo = layout
-
-    def get_layout(self) -> str:
-        return self.LayoutAtivo
-        
-    def set_layout(self, layout) -> None:
-        self.LayoutAtivo = layout
-
-    def is_layout_active(self, layout) -> bool:
-        return self.LayoutAtivo == layout
-    
-    def update_window_layout(self, janela, layoutNovo) -> None:
-        janela[self.get_layout()].update(visible=False)
-        self.set_layout(layoutNovo)
-        janela[layoutNovo].update(visible=True)
-
-    def reset_employee_menu(self, keyprefix) -> None:
-        janela[keyprefix+'-NOME'].update('')
-        janela[keyprefix+'-ENDERECO'].update('')
-        janela[keyprefix+'-TIPODECONTRATO'].update('Assalariado')
-        janela[keyprefix+'-SINDICATO'].update(False)
-        janela[keyprefix+'-VALORSINDICATO'].update('')
-        janela[keyprefix+'-VALORSINDICATO'].update(disabled=True)
-        janela[keyprefix+'-VALORSALARIO'].update('')
-        janela[keyprefix+'-VALORCOMISSAO'].update('')
-        janela[keyprefix+'-VALORCOMISSAO'].update(disabled=True)
-    
-    def import_employee_menu(self, employee):
-        janela['MEE-NOME'].update(employee.name)
-        janela['MEE-ENDERECO'].update(employee.adress)
-        janela['MEE-TIPODECONTRATO'].update(employee.category)
-        janela['MEE-VALORCOMISSAO'].update('')
-        janela['MEE-VALORCOMISSAO'].update(disabled=True)
-        janela['MEE-TEXTOSALARIO'].update('Salário Mensal')
-
-        if employee.category == 'Assalariado':
-            janela['MEE-VALORSALARIO'].update(employee.salary)
-
-        elif employee.category == 'Comissionado':
-            janela['MEE-VALORSALARIO'].update(employee.salary)
-            janela['MEE-VALORCOMISSAO'].update(employee.commission)
-            janela['MEE-VALORCOMISSAO'].update(disabled=False)
-
-        elif employee.category == 'Horista':
-            janela['MEE-TEXTOSALARIO'].update('Valor da Hora')
-            janela['MEE-VALORSALARIO'].update(employee.wage)
-
-        if employee.sid == -1:
-            janela['MEE-SINDICATO'].update(False)
-            janela['MEE-VALORSINDICATO'].update('')
-            janela['MEE-VALORSINDICATO'].update(disabled=True)
-        else:
-            janela['MEE-SINDICATO'].update(True)
-            janela['MEE-VALORSINDICATO'].update(employee.mfee)
-            janela['MEE-VALORSINDICATO'].update(disabled=False)
-
-
-
-
 
 #Funções
 def CheckPassword(user, password):
@@ -107,7 +45,7 @@ def janela_principal():
     ]
     layoutMenuSindicato = [
         [sg.Text('Gerenciamento do Sindicato', justification='center', size=(30,1))],
-        [sg.Button('Taxa de Serviço', key='MS-TAXA', size=(30,1))],
+        #[sg.Button('Taxa de Serviço', key='MS-TAXA', size=(30,1))],
         [sg.Button('Lista de Afiliados', key='MS-LISTA', size=(30,1))],
         [sg.Button('Voltar', key='MS-VOLTAR')]
     ]
@@ -249,12 +187,21 @@ def janela_calculo(employee, tipolayout):
         layout = [  [sg.Text(text=f'Funcionário: {employee.name}\nID: {employee.id}', size=(30,2),justification='left')],
                     [sg.Frame('Resultado de Venda',[[sg.Text('Valor da Venda', size=(14,1)),sg.Input(size=(16,1),key='C-VALOR')]])],
                     [sg.Button('Voltar', key='C-VOLTAR'), sg.Button('Confirmar', key='C-CONFIRMAR')]]
+    elif tipolayout == 'Taxa':
+        titulo = 'Lançar Taxa de Serviço'
+        layout = [  [sg.Text(text=f'Funcionário: {employee.name}\nSID: {employee.sid}', size=(30,2),justification='left')],
+                    [sg.Frame('Serviço',[[sg.Text('Valor da Taxa', size=(14,1)),sg.Input(size=(16,1),key='C-VALOR')]])],
+                    [sg.Button('Voltar', key='C-VOLTAR'), sg.Button('Confirmar', key='C-CONFIRMAR')]]
+    
     window = sg.Window(titulo, layout, modal=True)
     while True:
         evento, valores = window.read()
         if evento == 'Exit' or evento == sg.WIN_CLOSED or evento == 'C-VOLTAR':
             break
         elif evento == 'C-CONFIRMAR' and tipolayout == 'Ponto':
+            if valores['C-ENTRADAHORA'] == '' or valores['C-ENTRADAMINUTO'] == '' or valores['C-SAIDAHORA'] == '' or valores['C-SAIDAMINUTO'] == '':
+                sg.popup('Preencha todos os campos!')
+                continue
             Bhour   = int(valores['C-ENTRADAHORA'])
             Bmin    = int(valores['C-ENTRADAMINUTO'])
             Ehour   = int(valores['C-SAIDAHORA'])
@@ -278,6 +225,12 @@ def janela_calculo(employee, tipolayout):
                 break
             else:
                 sg.popup('ERRO: O valor da venda não pode ser negativo.', title='ERRO')
+        elif evento == 'C-CONFIRMAR' and tipolayout == 'Taxa':
+            totaltime = int(valores['C-VALOR'])
+            if totaltime > 0:
+                break
+            else:
+                sg.popup('ERRO: O valor da taxa não pode ser negativo.', title='ERRO')
     window.close()
     return totaltime
 ###############################################################################
@@ -366,7 +319,7 @@ while True:
             if selectedId != -1 and chave == 'L-EDITAR':
                 selectedEmployee = Empresa.employeesList.get(selectedId)
                 selectedSid = selectedEmployee.sid
-                lc.import_employee_menu(selectedEmployee)
+                lc.import_employee_menu(janela, selectedEmployee)
                 lc.update_window_layout(janela, '-LayoutEditarEmpregado-')
             elif selectedId != -1 and chave == 'L-REMOVER':
                 selectedEmployee = Empresa.employeesList.get(selectedId)
@@ -438,12 +391,12 @@ while True:
                     Sindicato.add_affiliate(newemployee)
                 
                 sg.popup(f"Funcionário {valores['MAE-NOME']} adicionado com sucesso!\nID: {newemployee.id}", title='Cadastro Concluído')
-                lc.reset_employee_menu('MAE')
+                lc.reset_employee_menu(janela,'MAE')
                 lc.update_window_layout(janela, '-LayoutMenuEmpresa-')
 
 
         elif evento == 'MAE-CANCELAR':
-            lc.reset_employee_menu('MAE')
+            lc.reset_employee_menu(janela,'MAE')
             lc.update_window_layout(janela, '-LayoutMenuEmpresa-')
 
 #######################################################################################################
@@ -522,7 +475,7 @@ while True:
                 sg.popup(f"Funcionário alterado para {editemployee.name} com sucesso!\nID: {editemployee.id}", title='Edição Concluído')
                 selectedId = -1
                 selectedSid = -1
-                lc.reset_employee_menu('MEE')
+                lc.reset_employee_menu(janela,'MEE')
                 lc.update_window_layout(janela, '-LayoutMenuEmpresa-')
 
 
@@ -530,7 +483,7 @@ while True:
             sg.popup('Nenhum detalhe foi alterado.', title='')
             selectedId = -1
             selectedSid = -1
-            lc.reset_employee_menu('MEE')
+            lc.reset_employee_menu(janela,'MEE')
             lc.update_window_layout(janela, '-LayoutMenuEmpresa-')
 
 
@@ -541,8 +494,11 @@ while True:
         
         if evento == 'MS-LISTA':
             selectedSid, chave = janela_lista_gerenciar('Afiliados', Sindicato.affiliatesList)
-            #if selectedSid != -1 and chave == 'L-TAXA':
-            print(selectedSid, chave)
+            if selectedSid != -1 and chave == 'L-TAXA':
+                selectedEmployee = Sindicato.affiliatesList.get(selectedSid)
+                valortaxa = janela_calculo(selectedEmployee, 'Taxa')
+                selectedEmployee.xfee += valortaxa
+                sg.popup(f'Taxa de R$ {valortaxa} registrada com sucesso para o seguinte funcionário:\nFuncionário: {selectedEmployee.name}\nSID: {selectedEmployee.sid}\nTotal Pendente: R$ {selectedEmployee.xfee}')
             pass
         
         

@@ -25,9 +25,9 @@ python login.py
 |    :---:   |  :---:   |      :---:      |  :---: |
 |1| Adição de um empregado| Um novo empregado é adicionado ao sistema. Os seguintes atributos são fornecidos: nome, endereço, tipo (hourly, salaried, commissioned) e os atributos associados (salário horário, salário mensal, comissão). Um número de empregado (único) deve ser escolhido automaticamente pelo sistema.| :heavy_check_mark: |
 |2| Remoção de um empregado| Um empregado é removido do sistema.| :heavy_check_mark: |
-|3| Lançar um Cartão de Ponto| O sistema anotará a informação do cartão de ponto e a associará ao empregado correto.| :x: |
-|4| Lançar um Resultado de Venda| O sistema anotará a informação do resultado da venda e a associará ao empregado correto.| :x: |
-|5| Lançar uma taxa de serviço|O sistema anotará a informação da taxa de serviço e a associará ao empregado correto.| :x: |
+|3| Lançar um Cartão de Ponto| O sistema anotará a informação do cartão de ponto e a associará ao empregado correto.| :heavy_check_mark: |
+|4| Lançar um Resultado de Venda| O sistema anotará a informação do resultado da venda e a associará ao empregado correto.| :heavy_check_mark: |
+|5| Lançar uma taxa de serviço|O sistema anotará a informação da taxa de serviço e a associará ao empregado correto.| :heavy_check_mark: |
 |6| Alterar detalhes de um empregado| Os seguintes atributos de um empregado podem ser alterados: nome, endereço, tipo (hourly, salaried, commisioned), método de pagamento, se pertence ao sindicato ou não, identificação no sindicato, taxa sindical. | :heavy_check_mark: |
 |7| Listar os empregados cadastrados \[extra] | O sistema listará todos os empregados cadastrados. | :heavy_check_mark: |
 |8| Rodar a folha de pagamento para hoje | O sistema deve achar todos os empregados que devem ser pagos no dia indicado, deve calcular o valor do salário e deve providenciar o pagamento de acordo com o método escolhido pelo empregado. | :x: |
